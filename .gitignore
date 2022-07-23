@@ -1,0 +1,6 @@
+.DS_Store
+CodeChallenge.Tests/bin/*
+CodeChallenge/bin/*
+CodeChallenge.Tests/obj/*
+CodeChallenge/obj/*
+
