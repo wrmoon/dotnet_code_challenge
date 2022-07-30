@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Threading;
 using CodeChallenge.Models;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace CodeChallenge.Repositories
         public EmployeeRespository(ILogger<IEmployeeRepository> logger, EmployeeContext employeeContext)
         {
             _employeeContext = employeeContext;
+            _employeeContext.Employees.Load();
             _logger = logger;
         }
 
@@ -29,7 +31,8 @@ namespace CodeChallenge.Repositories
 
         public Employee GetById(string id)
         {
-            return _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
+            Employee e =  _employeeContext.Employees.SingleOrDefault(e => e.EmployeeId == id);
+            return e;
         }
 
         public Task SaveAsync()

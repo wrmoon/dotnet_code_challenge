@@ -45,10 +45,23 @@ namespace CodeChallenge.Controllers
             return Ok(employee);
         }
 
+        [HttpGet("{id}/reporting_structure", Name = "getReportingStructureById")]
+        public IActionResult GetReportingStructure(String id)
+        {
+            _logger.LogDebug($"Received reporting structure get request for '{id}'");
+
+            var reporting_structure = _employeeService.GetReportingStructureById(id);
+
+            if (reporting_structure == null)
+                return NotFound();
+
+            return Ok(reporting_structure);
+        }
+
         [HttpPut("{id}")]
         public IActionResult ReplaceEmployee(String id, [FromBody]Employee newEmployee)
         {
-            _logger.LogDebug($"Recieved employee update request for '{id}'");
+            _logger.LogDebug($"Received employee update request for '{id}'");
 
             var existingEmployee = _employeeService.GetById(id);
             if (existingEmployee == null)

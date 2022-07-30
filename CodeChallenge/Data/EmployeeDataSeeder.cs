@@ -16,6 +16,8 @@ namespace CodeChallenge.Data
         public EmployeeDataSeeder(EmployeeContext employeeContext)
         {
             _employeeContext = employeeContext;
+            _employeeContext.Database.EnsureDeleted();
+            _employeeContext.Database.EnsureCreated();
         }
 
         public async Task Seed()
@@ -26,6 +28,12 @@ namespace CodeChallenge.Data
                 _employeeContext.Employees.AddRange(employees);
 
                 await _employeeContext.SaveChangesAsync();
+                /*
+                foreach(Employee e in employees)
+                {
+                    e.Dump("Seed");
+                }
+                */
             }
         }
 

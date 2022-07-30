@@ -1,4 +1,3 @@
-
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -15,23 +14,29 @@ namespace CodeCodeChallenge.Tests.Integration
     [TestClass]
     public class EmployeeControllerTests
     {
-        private static HttpClient _httpClient;
-        private static TestServer _testServer;
+        private HttpClient _httpClient;
+        private TestServer _testServer;
 
         [ClassInitialize]
         // Attribute ClassInitialize requires this signature
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         public static void InitializeClass(TestContext context)
         {
+        }
+
+        [TestInitialize]
+        public void Initialize()
+        {
             _testServer = new TestServer();
             _httpClient = _testServer.NewClient();
         }
 
-        [ClassCleanup]
-        public static void CleanUpTest()
+        [TestCleanup]
+        public void CleanUpTest()
         {
             _httpClient.Dispose();
             _testServer.Dispose();
+            _testServer = null;
         }
 
         [TestMethod]
@@ -89,7 +94,7 @@ namespace CodeCodeChallenge.Tests.Integration
             // Arrange
             var employee = new Employee()
             {
-                EmployeeId = "03aa1462-ffa9-4978-901b-7c001562cf6f",
+                EmployeeId = "62c1084e-6e34-4630-93fd-9153afb65309",
                 Department = "Engineering",
                 FirstName = "Pete",
                 LastName = "Best",
@@ -132,5 +137,38 @@ namespace CodeCodeChallenge.Tests.Integration
             // Assert
             Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
         }
+
+        [TestMethod]
+        public void GetReportingStructure_Returns_OK()
+        {
+            // Arrange
+            var employeeId = "16a596ae-edd3-4847-99fe-c4518e82c86f"; // John Lennon
+
+            // Execute
+            var getRequestTask = _httpClient.GetAsync($"api/employee/{employeeId}/reporting_structure");
+            var response = getRequestTask.Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+            var rs = response.DeserializeContent<ReportingStructure>();
+            Assert.AreEqual(employeeId, rs.Employee.EmployeeId);
+            Assert.AreEqual(4, rs.NumberOfReports);
+        }
+
+        [TestMethod]
+        public void GetReportingStructure_BadId_Returns_NotFound()
+        {
+            // Arrange
+            var employeeId = "Nobody";
+
+            // Execute
+            var getRequestTask = _httpClient.GetAsync($"api/employee/{employeeId}/reporting_structure");
+            var response = getRequestTask.Result;
+
+            // Assert
+            Assert.AreEqual(HttpStatusCode.NotFound, response.StatusCode);
+        }
+
+
     }
 }

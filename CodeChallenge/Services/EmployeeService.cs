@@ -34,11 +34,56 @@ namespace CodeChallenge.Services
         {
             if(!String.IsNullOrEmpty(id))
             {
-                return _employeeRepository.GetById(id);
+                Employee e = _employeeRepository.GetById(id);
+                return e;
             }
 
             return null;
         }
+
+        public ReportingStructure GetReportingStructureById(string id)
+        {
+            Employee employee = GetById(id);
+            if (employee == null)
+            {
+                return null;
+            }
+
+            ReportingStructure reporting_structure = new ReportingStructure();
+            reporting_structure.Employee = employee;
+            reporting_structure.NumberOfReports = GetNumOfReports(employee);
+
+            return reporting_structure;
+        }
+
+        // *** Danger this is recursive
+        // IRL, this algorithm would have some safety mechanisms to ensure it won't loop
+        private int GetNumOfReports(Employee employee)
+        {
+            int num_reports = 0;
+            if (employee == null)
+            {
+                return 0;
+            }
+            //employee.Dump("gnor");
+            _logger.LogDebug("xx {0}", employee.LastName);
+            if (employee.DirectReports == null)
+            {
+                return 0;
+            }
+            _logger.LogDebug("xx {0}: {1}", employee.LastName, employee.DirectReports.Count);
+            num_reports += employee.DirectReports.Count;
+            foreach (Employee direct in employee.DirectReports)
+            {
+                if (direct != null)
+                {
+                    _logger.LogDebug("->> xx {0}: {1}", employee.LastName, direct.LastName);
+                    num_reports += GetNumOfReports(direct);
+                }
+            }
+            return num_reports;
+        }
+
 
         public Employee Replace(Employee originalEmployee, Employee newEmployee)
         {
