@@ -1,4 +1,5 @@
 .DS_Store
+.vscode/*
 CodeChallenge.Tests/bin/*
 CodeChallenge/bin/*
 CodeChallenge.Tests/obj/*
