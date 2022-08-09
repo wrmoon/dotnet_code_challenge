@@ -36,7 +36,6 @@ namespace CodeCodeChallenge.Tests.Integration
         {
             _httpClient.Dispose();
             _testServer.Dispose();
-            _testServer = null;
         }
 
         [TestMethod]

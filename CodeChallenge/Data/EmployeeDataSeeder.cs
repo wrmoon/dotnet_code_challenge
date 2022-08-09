@@ -28,12 +28,6 @@ namespace CodeChallenge.Data
                 _employeeContext.Employees.AddRange(employees);
 
                 await _employeeContext.SaveChangesAsync();
-                /*
-                foreach(Employee e in employees)
-                {
-                    e.Dump("Seed");
-                }
-                */
             }
         }
 
