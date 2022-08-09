@@ -41,3 +41,5 @@
 
 ## Task 2
 * For compensation, that is data that is separate from the employee itself. There are no dependencies on other employee data, and it is very possible in the future we'd want to look at compensation data divorced from the employees themselves. Compensation data would go in its own table, with a fk to the Employee. 
+
+* 
