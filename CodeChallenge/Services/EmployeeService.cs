@@ -57,7 +57,7 @@ namespace CodeChallenge.Services
         }
 
         // *** Danger this is recursive
-        // IRL, this algorithm would have some safety mechanisms to ensure it won't loop
+        // IRL, this algorithm would have some safety mechanisms to ensure it won't get stuck
         private int GetNumOfReports(Employee employee)
         {
             int num_reports = 0;
@@ -65,19 +65,15 @@ namespace CodeChallenge.Services
             {
                 return 0;
             }
-            //employee.Dump("gnor");
-            _logger.LogDebug("xx {0}", employee.LastName);
             if (employee.DirectReports == null)
             {
                 return 0;
             }
-            _logger.LogDebug("xx {0}: {1}", employee.LastName, employee.DirectReports.Count);
             num_reports += employee.DirectReports.Count;
             foreach (Employee direct in employee.DirectReports)
             {
                 if (direct != null)
                 {
-                    _logger.LogDebug("->> xx {0}: {1}", employee.LastName, direct.LastName);
                     num_reports += GetNumOfReports(direct);
                 }
             }
