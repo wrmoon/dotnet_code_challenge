@@ -42,4 +42,15 @@
 ## Task 2
 * For compensation, that is data that is separate from the employee itself. There are no dependencies on other employee data, and it is very possible in the future we'd want to look at compensation data divorced from the employees themselves. Compensation data would go in its own table, with a fk to the Employee. 
 
-* 
+* I used the same context and data seeder
+
+## To talk about
+* Looking back, I should have left the tests alone, and perhaps renamed them as integration tests, because that's what they are. Then, I should have tailored the new tests taking into account that the state is held on a per TestClass basis.
+* I'm not paricularly happy with leaving the link between `Compensation`
+
+## To talk about
+* Looking back, I should have left the tests alone, and perhaps renamed them as integration tests, because that's what they are. Then, I should have tailored the new tests taking into account that the state is held on a per TestClass basis.
+* I'm not paricularly happy with leaving the link between `Compensation.Id` and `Employee.EmployeeId` be as weak as it is. With more time, I would have strengthened that relationship to result in a FK. 
+* As it is, you can create a compensation with a bogus employee Id. This is probably error-prone, but it does allow for behavior, like even if an employee is deleted, their compensation data remains behind.
+* The key for the Compensation should be its own Id, or perhaps a composite key made of the employee id, salary, and effective date.
+* Also consider a link in each Employee to its collection of Compensation data. 
